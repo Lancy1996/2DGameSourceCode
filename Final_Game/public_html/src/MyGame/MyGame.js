@@ -12,69 +12,88 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function MyGame() {
-    this.kBackGround = "assets/Level1.png";
+    this.kBackGround = "assets/Levelone.json";
     this.mHero = null;
     this.mCamera = null;
     this.mCameraAll = null;
-    this.mBackGround = null;
-    this.mPlatform = null;
-    this.mBarriar = null;
+    this.mBarriarSet = new GameObjectSet();
+    this.mMainView = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-  gEngine.Textures.loadTexture(this.kBackGround);
+  gEngine.TextFileLoader.loadTextFile(this.kBackGround, gEngine.TextFileLoader.eTextFileType.eTextFile);
 };
 
 MyGame.prototype.unloadScene = function () {
-    gEngine.Textures.unloadTexture(this.kBackGround);
+    gEngine.TextFileLoader.unloadTextFile(this.kBackGround);
 };
 
 MyGame.prototype.initialize = function () {
+  var jsonString = gEngine.ResourceMap.retrieveAsset(this.kBackGround);
+  // two way to change a json to js object
+  var sceneInfo = JSON.parse(jsonString);
   this.mCamera = new Camera(
-    [0,0],
-    100,
+    [4,5],
+    40,
     [0,0,1280,720]
   );
 
   this.mCameraAll = new Camera(
-    [0,0],
+    [50,50],
     100,
-    [960,520,200,200]
+    [1080,520,200,200]
   );
 
-  this.mHero = new Hero(0,0);
-  this.mPlatform = new Platform(0,-20);
-  this.mBarriar = new Platform(20,-10);
+  this.mHero = new Hero(4,5);
 
-  this.mBackGround = new TextureRenderable(this.kBackGround);
-  this.mBackGround.setColor([1 , 1 , 1 , 0]);
-  this.mBackGround.getXform().setPosition(0,0);
-  this.mBackGround.getXform().setSize(50,50);
+  var i,obj;
+  for (i = 0;i < 18;i++){
+      obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+  }
 };
+
+
 
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
 MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9 , 0.9 , 0.9, 1]);
-    this.mCamera.setupViewProjection();
 
-    this.mBackGround.draw(this.mCamera);
-    this.mBarriar.draw(this.mCamera);
+    this.mCamera.setupViewProjection();
     this.mHero.draw(this.mCamera);
-    this.mPlatform.draw(this.mCamera);
+    this.mBarriarSet.draw(this.mCamera);
 
     this.mCameraAll.setupViewProjection();
-    this.mBackGround.draw(this.mCameraAll);
-    this.mBarriar.draw(this.mCameraAll);
     this.mHero.draw(this.mCameraAll);
-    this.mPlatform.draw(this.mCameraAll);
+    this.mBarriarSet.draw(this.mCameraAll);
+
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    this.mHero.update();
-    this.mCamera.setWCCenter(this.mHero.getXform().getXPos(),this.mHero.getXform().getYPos());
+    var deltaR = 1.2;
+    this.mCamera.update();
+    this.mHero.update(this.mBarriarSet);
+    this.mBarriarSet.update();
+    this.mCamera.panWith(this.mHero.getXform(), 0.5);
+    // var xform = this.mGoal.getXform();
+    // xform.incRotationByDegree(deltaR);
+    // var WC = this.mCamera.getWCCenter();
+    // if ((this.mHero.getXform().getXPos() < (WC[0] - this.mCamera.getWCWidth()/2)) | (this.mHero.getXform().getXPos() > (WC[0] + this.mCamera.getWCWidth()/2))){
+    //   this.mCamera.panTo(this.mHero.getXform().getXPos(),this.mHero.getXform().getYPos());
+    // }
+    // if ((this.mHero.getXform().getYPos() < (WC[1] - this.mCamera.getHeight()/2)) | (this.mHero.getXform().getYPos() > (WC[1] + this.mCamera.getWCHeight()/2))){
+    //   this.mCamera.panTo(this.mHero.getXform().getXPos(),this.mHero.getXform().getYPos());
+    // }
     this._physicsSimulation();
 };

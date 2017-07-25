@@ -22,12 +22,12 @@ function Hero(atX, atY) {
     this.mDye.setColor([0, 1, 0, 1]);
     this.mDye.getXform().setPosition(atX, atY);
     this.mDye.getXform().setZPos(5);
-    this.mDye.getXform().setSize(5, 5);
+    this.mDye.getXform().setSize(3, 3);
     GameObject.call(this, this.mDye);
     this.mJumpFlag = 0;
     this.mtimeout = 60;
     this.mdown = false;
-    var r = new RigidRectangle(this.getXform(), 5, 5);
+    var r = new RigidRectangle(this.getXform(), 3, 3);
     r.setMass(0.7);  // less dense than Minions
     r.setRestitution(0.3);
     r.setColor([0, 1, 0, 0]);
@@ -36,16 +36,27 @@ function Hero(atX, atY) {
 }
 gEngine.Core.inheritPrototype(Hero, GameObject);
 
-Hero.prototype.update = function () {
+Hero.prototype.update = function (BarriarSet) {
     // control by WASD
     GameObject.prototype.update.call(this);
     var xform = this.getXform();
     var v = this.getPhysicsComponent().getVelocity();
+    var tBarriarSet = BarriarSet;
+    var i;
     // if (this.mJumpFlag === -1 && v[1] === -0.915750927725525){ //获取停止信号
     //   this.mJumpFlag = 0;
-    // }
-    if (this.mJumpFlag === -1 && ((this.mDye.getXform().getYPos()+20) <= 5 )){
-      this.mJumpFlag = 0;
+    //
+    if (this.mJumpFlag === -1 ){
+      for (i = 0;i < tBarriarSet.size();i++){
+        if (this.mDye.getXform().getYPos() > tBarriarSet.getObjectAt(i).getXform().getYPos()){
+          if ((this.mDye.getXform().getYPos() - tBarriarSet.getObjectAt(i).getXform().getYPos()) <= ((this.mDye.getXform().getHeight()/2) + (tBarriarSet.getObjectAt(i).getXform().getHeight()/2)) ){
+            if (this.mDye.getXform().getXPos() > tBarriarSet.getObjectAt(i).getXform().getXPos() - tBarriarSet.getObjectAt(i).getXform().getWidth() &&
+                this.mDye.getXform().getXPos() < tBarriarSet.getObjectAt(i).getXform().getXPos() + tBarriarSet.getObjectAt(i).getXform().getWidth()){
+                  this.mJumpFlag = 0;
+            }
+          }
+        }
+      }
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 1) {
         v[1] = 30;
@@ -57,8 +68,8 @@ Hero.prototype.update = function () {
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.S)) {
         var tempv = v[0];
-        this.mDye.getXform().setSize(5, 2.5);
-        var r = new RigidRectangle(this.getXform(), 5, 2.5);
+        this.mDye.getXform().setSize(3, 1.5);
+        var r = new RigidRectangle(this.getXform(), 3, 1.5);
         r.setMass(0.7);  // less dense than Minions
         r.setRestitution(0.3);
         r.setColor([0, 1, 0, 1]);
@@ -68,10 +79,10 @@ Hero.prototype.update = function () {
         v[0] = tempv;
     }
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)) {
-        v[0] = -20;
+        v[0] = -15;
     }
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)) {
-        v[0] = 20;
+        v[0] = 15;
     }
     if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.A) && v[0] < 0) {
         v[0] += 0.2;
@@ -86,8 +97,8 @@ Hero.prototype.update = function () {
     }
     if (this.mtimeout === 0){
       var tempv = v[0];
-      this.mDye.getXform().setSize(5, 5);
-      var r = new RigidRectangle(this.getXform(), 5, 5);
+      this.mDye.getXform().setSize(3, 3);
+      var r = new RigidRectangle(this.getXform(),3, 3);
       r.setMass(0.7);  // less dense than Minions
       r.setRestitution(0.3);
       r.setColor([0, 1, 0, 1]);

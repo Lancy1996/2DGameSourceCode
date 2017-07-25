@@ -1,0 +1,144 @@
+{
+    "name": "Levelone",
+
+    "Square": [
+        {
+            "Pos": [0, 0],
+            "Width": 2,
+            "Height": 1024,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"boundary1"
+        },
+
+        {
+            "Pos": [100, 0],
+            "Width": 2,
+            "Height": 1024,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"boundary2"
+        },
+
+      {
+            "Pos": [50, 100],
+            "Width": 100,
+            "Height": 3,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"boundary3"
+        },
+
+      {
+            "Pos": [50, 0],
+            "Width": 100,
+            "Height": 3,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"boundary4"
+        },
+        {
+            "Pos": [18, 3],
+            "Width": 10,
+            "Height": 3,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"Jbarriar"
+        },
+          {
+            "Pos": [30, 6],
+            "Width": 5,
+            "Height": 10,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"Jbarriar"
+        },
+         {
+            "Pos": [64, 3],
+            "Width": 72,
+            "Height": 9,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"Jbarriar"
+        },
+          {
+            "Pos": [55, 13.5],
+            "Width": 5,
+            "Height": 8,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1],
+            "Tag":"Dbarriar"
+        },
+        {
+            "Pos": [88, 10],
+            "Width": 25,
+            "Height": 8,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+         {
+            "Pos": [90, 17],
+            "Width": 20,
+            "Height": 8,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+          {
+            "Pos": [92, 24],
+            "Width": 15,
+            "Height": 8,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+         {
+            "Pos": [73, 31],
+            "Width": 10,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+        {
+            "Pos": [60, 26],
+            "Width": 10,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+          {
+            "Pos": [45, 21],
+            "Width": 10,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+         {
+            "Pos": [30, 26],
+            "Width": 10,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+         {
+            "Pos": [15, 31],
+            "Width": 10,
+            "Height": 6,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        },
+        {
+            "Pos": [7, 38],
+            "Width":  4,
+            "Height": 4,
+            "Rotation": 45,
+            "Color": [1, 0, 0, 1],
+            "Tag":"Rbarrair"
+        },
+          {
+            "Pos": [2, 45],
+            "Width":  5,
+            "Height": 5,
+            "Rotation": 0,
+            "Color": [0, 0, 0, 1]
+        }
+    ]
+}
