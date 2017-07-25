@@ -19,15 +19,18 @@ function Hero(atX, atY) {
     //     this.mDye = new LightRenderable(spriteTexture);
     // }
     this.mDye = new Renderable();
-    this.mDye.setColor([1, 1, 1, 0]);
+    this.mDye.setColor([0, 1, 0, 1]);
     this.mDye.getXform().setPosition(atX, atY);
     this.mDye.getXform().setZPos(5);
     this.mDye.getXform().setSize(5, 5);
     GameObject.call(this, this.mDye);
+    this.mJumpFlag = 0;
+    this.mtimeout = 60;
+    this.mdown = false;
     var r = new RigidRectangle(this.getXform(), 5, 5);
     r.setMass(0.7);  // less dense than Minions
     r.setRestitution(0.3);
-    r.setColor([0, 1, 0, 1]);
+    r.setColor([0, 1, 0, 0]);
     r.setDrawBounds(true);
     this.setPhysicsComponent(r);
 }
@@ -38,16 +41,60 @@ Hero.prototype.update = function () {
     GameObject.prototype.update.call(this);
     var xform = this.getXform();
     var v = this.getPhysicsComponent().getVelocity();
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W)) {
+    // if (this.mJumpFlag === -1 && v[1] === -0.915750927725525){ //获取停止信号
+    //   this.mJumpFlag = 0;
+    // }
+    if (this.mJumpFlag === -1 && ((this.mDye.getXform().getYPos()+20) <= 5 )){
+      this.mJumpFlag = 0;
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 1) {
         v[1] = 30;
+        this.mJumpFlag = -1;
+    }
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 0) {
+        v[1] = 30;
+        this.mJumpFlag = 1;
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.S)) {
-        v[1] = -30;
+        var tempv = v[0];
+        this.mDye.getXform().setSize(5, 2.5);
+        var r = new RigidRectangle(this.getXform(), 5, 2.5);
+        r.setMass(0.7);  // less dense than Minions
+        r.setRestitution(0.3);
+        r.setColor([0, 1, 0, 1]);
+        r.setDrawBounds(true);
+        this.setPhysicsComponent(r);
+        this.mdown = true;
+        v[0] = tempv;
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.A)) {
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)) {
         v[0] = -20;
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.D)) {
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)) {
         v[0] = 20;
+    }
+    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.A) && v[0] < 0) {
+        v[0] += 0.2;
+    }
+    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.D) && v[0] > 0 ) {
+        v[0] -= 0.2;
+    }
+    if (this.mdown){
+      this.mtimeout --;
+      if (this.mtimeout === 0)
+        this.mdown = false;
+    }
+    if (this.mtimeout === 0){
+      var tempv = v[0];
+      this.mDye.getXform().setSize(5, 5);
+      var r = new RigidRectangle(this.getXform(), 5, 5);
+      r.setMass(0.7);  // less dense than Minions
+      r.setRestitution(0.3);
+      r.setColor([0, 1, 0, 1]);
+      r.setDrawBounds(true);
+      this.setPhysicsComponent(r);
+      this.mtimeout = 60;
+      this.mdown = false;
+      v[0] = tempv;
     }
 };

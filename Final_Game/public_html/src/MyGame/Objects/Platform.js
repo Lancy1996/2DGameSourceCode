@@ -12,7 +12,7 @@
 function Platform(atX, atY) {
     this.mPlatform = new Renderable();
 
-    this.mPlatform.setColor([1, 1, 1, 0]);
+    this.mPlatform.setColor([1, 0, 0, 1]);
     this.mPlatform.getXform().setPosition(atX, atY);
     this.mPlatform.getXform().setZPos(5);
     this.mPlatform.getXform().setSize(30, 3.75);
@@ -22,7 +22,7 @@ function Platform(atX, atY) {
     var rigidShape = new RigidRectangle(this.getXform(), 30, 3);
     rigidShape.setMass(0);  // ensures no movements!
     rigidShape.setDrawBounds(true);
-    rigidShape.setColor([1, 0.2, 0.2, 1]);
+    rigidShape.setColor([1, 0.2, 0.2, 0]);
     this.setPhysicsComponent(rigidShape);
 }
 gEngine.Core.inheritPrototype(Platform, GameObject);
