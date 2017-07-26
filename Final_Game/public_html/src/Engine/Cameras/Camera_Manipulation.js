@@ -1,4 +1,4 @@
-/* 
+/*
  * File: Camera_Manipulation.js
  * Defines the functions that supports camera manipulations
  */
@@ -46,6 +46,9 @@ Camera.prototype.panWith = function (aXform, zone) {
         if ((status & BoundingBox.eboundCollideStatus.eCollideLeft) !== 0) {
             newC[0] = pos[0] - (aXform.getWidth() / 2) + (zone * this.getWCWidth() / 2);
         }
+        if (!status){
+            newC[0] = aXform.getXPos();newC[1] = aXform.getYPos();
+        }
         this.mCameraState.setCenter(newC);
     }
 };
@@ -65,7 +68,7 @@ Camera.prototype.zoomBy = function (zoom) {
     }
 };
 
-// zoom towards (pX, pY) by zoom: 
+// zoom towards (pX, pY) by zoom:
 // zoom > 1 ==> zooming out, see more of the world
 // zoom < 1 ==> zooming in, see less of the world, more detailed
 // zoom < 0 is ignored

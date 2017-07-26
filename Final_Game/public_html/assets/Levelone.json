@@ -128,13 +128,13 @@
         {
             "Pos": [7, 38],
             "Width":  4,
-            "Height": 4,
-            "Rotation": 45,
+            "Height": 2,
+            "Rotation": 0,
             "Color": [1, 0, 0, 1],
             "Tag":"Rbarrair"
         },
           {
-            "Pos": [2, 45],
+            "Pos": [2, 55],
             "Width":  5,
             "Height": 5,
             "Rotation": 0,

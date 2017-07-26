@@ -49,6 +49,18 @@ MyGame.prototype.initialize = function () {
 
   var i,obj;
   for (i = 0;i < 18;i++){
+    if(sceneInfo.Square[i].Tag === "Rbarrair"){
+      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
+    else {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -58,6 +70,7 @@ MyGame.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
+    }
   }
 };
 
