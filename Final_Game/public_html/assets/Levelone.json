@@ -1,6 +1,14 @@
 {
     "name": "Levelone",
 
+    "Type" : {
+      "Boundary" : 0,
+      "Platform" : 1,
+      "UDPlatform" : 2,
+      "LRPlatform" : 3,
+      "NailSquare" : 4
+    },
+
     "Square": [
         {
             "Pos": [0, 0],
@@ -8,7 +16,7 @@
             "Height": 1024,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"boundary1"
+            "Tag": 0
         },
 
         {
@@ -17,7 +25,7 @@
             "Height": 1024,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"boundary2"
+            "Tag": 0
         },
 
       {
@@ -26,7 +34,7 @@
             "Height": 3,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"boundary3"
+            "Tag": 0
         },
 
       {
@@ -35,7 +43,7 @@
             "Height": 3,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"boundary4"
+            "Tag": 0
         },
         {
             "Pos": [18, 3],
@@ -43,7 +51,7 @@
             "Height": 3,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"Jbarriar"
+            "Tag": 1
         },
           {
             "Pos": [30, 6],
@@ -51,7 +59,7 @@
             "Height": 10,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"Jbarriar"
+            "Tag": 1
         },
          {
             "Pos": [64, 3],
@@ -59,7 +67,7 @@
             "Height": 9,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"Jbarriar"
+            "Tag": 1
         },
           {
             "Pos": [55, 13.5],
@@ -67,63 +75,71 @@
             "Height": 8,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            "Tag":"Dbarriar"
+            "Tag": 1
         },
         {
             "Pos": [88, 10],
             "Width": 25,
             "Height": 8,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag" : 1
         },
          {
             "Pos": [90, 17],
             "Width": 20,
             "Height": 8,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
           {
             "Pos": [92, 24],
             "Width": 15,
             "Height": 8,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
          {
             "Pos": [73, 31],
             "Width": 10,
             "Height": 6,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
         {
             "Pos": [60, 26],
             "Width": 10,
             "Height": 6,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
           {
             "Pos": [45, 21],
             "Width": 10,
             "Height": 6,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
          {
             "Pos": [30, 26],
             "Width": 10,
             "Height": 6,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
          {
             "Pos": [15, 31],
             "Width": 10,
             "Height": 6,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         },
         {
             "Pos": [7, 38],
@@ -131,14 +147,16 @@
             "Height": 2,
             "Rotation": 0,
             "Color": [1, 0, 0, 1],
-            "Tag":"Rbarrair"
+            "Tag": 2,
+            "High" : 10
         },
           {
             "Pos": [2, 55],
             "Width":  5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [0, 0, 0, 1]
+            "Color": [0, 0, 0, 1],
+            "Tag": 1
         }
     ]
 }

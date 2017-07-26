@@ -48,10 +48,10 @@ Hero.prototype.update = function (BarriarSet) {
     //
     if (this.mJumpFlag === -1 ){
       for (i = 0;i < tBarriarSet.size();i++){
-        if (this.mDye.getXform().getYPos() > tBarriarSet.getObjectAt(i).getXform().getYPos()){
-          if ((this.mDye.getXform().getYPos() - tBarriarSet.getObjectAt(i).getXform().getYPos()) <= ((this.mDye.getXform().getHeight()/2) + (tBarriarSet.getObjectAt(i).getXform().getHeight()/2)) ){
-            if (this.mDye.getXform().getXPos() > tBarriarSet.getObjectAt(i).getXform().getXPos() - tBarriarSet.getObjectAt(i).getXform().getWidth() &&
-                this.mDye.getXform().getXPos() < tBarriarSet.getObjectAt(i).getXform().getXPos() + tBarriarSet.getObjectAt(i).getXform().getWidth()){
+        if (this.mDye.getXform().getXPos() > (BarriarSet.getObjectAt(i).getXform().getXPos() - tBarriarSet.getObjectAt(i).getXform().getWidth()/2) &&
+            this.mDye.getXform().getXPos() < (tBarriarSet.getObjectAt(i).getXform().getXPos() + tBarriarSet.getObjectAt(i).getXform().getWidth()/2)){
+          if (this.mDye.getXform().getYPos() > tBarriarSet.getObjectAt(i).getXform().getYPos()){
+            if ((this.mDye.getXform().getYPos() - tBarriarSet.getObjectAt(i).getXform().getYPos()) <= ((this.mDye.getXform().getHeight() + tBarriarSet.getObjectAt(i).getXform().getHeight())/2)){
                   this.mJumpFlag = 0;
             }
           }
@@ -65,6 +65,14 @@ Hero.prototype.update = function (BarriarSet) {
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 0) {
         v[1] = 30;
         this.mJumpFlag = 1;
+    }
+    for (i = 0;i < tBarriarSet.size();i++){
+      if (this.mDye.getXform().getYPos() > (BarriarSet.getObjectAt(i).getXform().getYPos() - tBarriarSet.getObjectAt(i).getXform().getHeight()/2) &&
+          this.mDye.getXform().getYPos() < (tBarriarSet.getObjectAt(i).getXform().getYPos() + tBarriarSet.getObjectAt(i).getXform().getHeight()/2)){
+          if (Math.abs((this.mDye.getXform().getXPos() - tBarriarSet.getObjectAt(i).getXform().getXPos())) <= ((this.mDye.getXform().getWidth() + tBarriarSet.getObjectAt(i).getXform().getWidth())/2)){
+                this.mJumpFlag = 0;
+          }
+      }
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.S)) {
         var tempv = v[0];

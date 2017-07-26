@@ -9,7 +9,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownPlatform(atX, atY,inColor) {
+function UpAndDownPlatform(atX, atY,inColor,high) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);

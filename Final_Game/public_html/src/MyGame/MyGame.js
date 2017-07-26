@@ -49,8 +49,8 @@ MyGame.prototype.initialize = function () {
 
   var i,obj;
   for (i = 0;i < 18;i++){
-    if(sceneInfo.Square[i].Tag === "Rbarrair"){
-      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color);
+    if(sceneInfo.Square[i].Tag === sceneInfo.Type.UDPlatform){
+      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
