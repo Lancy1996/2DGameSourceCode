@@ -11,102 +11,91 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+var gHp = 3;
+var gState = 0;
+
 function MyGame() {
-    this.kBackGround = "assets/Levelone.json";
-    this.mHero = null;
-    this.mCamera = null;
-    this.mCameraAll = null;
-    this.mBarriarSet = new GameObjectSet();
-    this.mMainView = null;
+  this.klevelone = "assets/Levelone.json";
+  this.rRun = "assets/rRun.png";//
+  this.lRun = "assets/lRun.png";//
+
+  this.rStand = "assets/rStand.png";//
+  this.lStand = "assets/lStand.png";//
+
+  this.drop = "assets/Drop.png";//
+
+  this.rClimb = "assets/rClimb.png";//
+  this.lClimb = "assets/lClimb.png";//
+
+  this.rDash = "assets/rDash.png";
+  this.lDash = "assets/lDash.png";
+
+  this.rJump = "assets/rJump.png";//
+  this.lJump = "assets/lJump.png";//
+
+  this.animate = null;
+  this.mCamera = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-  gEngine.TextFileLoader.loadTextFile(this.kBackGround, gEngine.TextFileLoader.eTextFileType.eTextFile);
+  gEngine.TextFileLoader.loadTextFile(this.klevelone, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.Textures.loadTexture(this.rRun);
+    gEngine.Textures.loadTexture(this.lRun);
+    gEngine.Textures.loadTexture(this.rStand);
+    gEngine.Textures.loadTexture(this.lStand);
+    gEngine.Textures.loadTexture(this.drop);
+    gEngine.Textures.loadTexture(this.rClimb);
+    gEngine.Textures.loadTexture(this.lClimb);
+    gEngine.Textures.loadTexture(this.rDash);
+    gEngine.Textures.loadTexture(this.lDash);
+    gEngine.Textures.loadTexture(this.rJump);
+    gEngine.Textures.loadTexture(this.lJump);
 };
 
 MyGame.prototype.unloadScene = function () {
-    gEngine.TextFileLoader.unloadTextFile(this.kBackGround);
+  gState ++;
+  if (gState === 1){
+    var nextLevel = new Levelone();
+  }
+  gEngine.Core.startScene(nextLevel);
 };
 
 MyGame.prototype.initialize = function () {
-  var jsonString = gEngine.ResourceMap.retrieveAsset(this.kBackGround);
-  // two way to change a json to js object
-  var sceneInfo = JSON.parse(jsonString);
-  this.mCamera = new Camera(
-    [4,5],
-    40,
-    [0,0,1280,720]
-  );
-
-  this.mCameraAll = new Camera(
-    [50,50],
-    100,
-    [1080,520,200,200]
-  );
-
-  this.mHero = new Hero(4,5);
-
-  var i,obj;
-  for (i = 0;i < 18;i++){
-    if(sceneInfo.Square[i].Tag === sceneInfo.Type.UDPlatform){
-      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High);
-      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-      rigidShape.setMass(0);  // ensures no movements!
-      rigidShape.setDrawBounds(true);
-      rigidShape.setColor([1, 1, 1, 0]);
-      obj.setPhysicsComponent(rigidShape);
-      this.mBarriarSet.addToSet(obj);
-    }
-    else {
-      obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color);
-      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-      rigidShape.setMass(0);  // ensures no movements!
-      rigidShape.setDrawBounds(true);
-      rigidShape.setColor([1, 1, 1, 0]);
-      obj.setPhysicsComponent(rigidShape);
-      this.mBarriarSet.addToSet(obj);
-    }
-  }
+    this.animate = new SpriteAnimateRenderable(this.rRun);
+    this.animate.setColor([1,1,1,0]);
+    this.animate.getXform().setPosition(0,0);
+    this.animate.getXform().setSize(10,10);
+    this.animate.setSpriteSequence(128,0 ,
+                                   128,128,
+                                   6,
+                                   0);
+    this.animate.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
+    this.animate.setAnimationSpeed(8);
+    this.mCamera = new Camera([0,0],
+      10,
+      [200,200,200,200]
+    );
+    this.mCamera.setBackgroundColor([0.9 , 0.9, 0.9 , 0]);
 };
-
-
 
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
 MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9 , 0.9 , 0.9, 1]);
-
     this.mCamera.setupViewProjection();
-    this.mHero.draw(this.mCamera);
-    this.mBarriarSet.draw(this.mCamera);
-
-    this.mCameraAll.setupViewProjection();
-    this.mHero.draw(this.mCameraAll);
-    this.mBarriarSet.draw(this.mCameraAll);
-
+    this.animate.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-    var deltaR = 1.2;
-    this.mCamera.update();
-    this.mHero.update(this.mBarriarSet);
-    this.mBarriarSet.update();
-    this.mCamera.panWith(this.mHero.getXform(), 0.5);
-    // var xform = this.mGoal.getXform();
-    // xform.incRotationByDegree(deltaR);
-    // var WC = this.mCamera.getWCCenter();
-    // if ((this.mHero.getXform().getXPos() < (WC[0] - this.mCamera.getWCWidth()/2)) | (this.mHero.getXform().getXPos() > (WC[0] + this.mCamera.getWCWidth()/2))){
-    //   this.mCamera.panTo(this.mHero.getXform().getXPos(),this.mHero.getXform().getYPos());
-    // }
-    // if ((this.mHero.getXform().getYPos() < (WC[1] - this.mCamera.getHeight()/2)) | (this.mHero.getXform().getYPos() > (WC[1] + this.mCamera.getWCHeight()/2))){
-    //   this.mCamera.panTo(this.mHero.getXform().getXPos(),this.mHero.getXform().getYPos());
-    // }
-    this._physicsSimulation();
+  this.animate.updateAnimation();
+  if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
+  gEngine.GameLoop.stop();
+  }
+};
+
+MyGame.prototype._selectCharacter = function () {
+
 };

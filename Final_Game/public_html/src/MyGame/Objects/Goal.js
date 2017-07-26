@@ -9,20 +9,24 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Platform(atX, atY,inColor,type) {
+function Goal(atX, atY,inColor,type) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);
     this.mPlatform.getXform().setPosition(atX, atY);
     this.mPlatform.getXform().setZPos(5);
     this.mPlatform.getXform().setSize(30, 3.75);
+    this.mFlag = type;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);
-    this.mFlag = type;
 
 }
-gEngine.Core.inheritPrototype(Platform, GameObject);
+gEngine.Core.inheritPrototype(Goal, GameObject);
 
-Platform.prototype.getFlag = function(){
+Goal.prototype.getFlag = function(){
   return this.mFlag;
 }
+
+Goal.prototype.update = function (){
+
+};

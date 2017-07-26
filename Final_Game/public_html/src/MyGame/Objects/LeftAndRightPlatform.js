@@ -9,39 +9,39 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownPlatform(atX, atY,inColor,high,type) {
+function LeftAndRightPlatform(atX, atY,inColor,wide,type) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);
     this.mPlatform.getXform().setPosition(atX, atY);
     this.mPlatform.getXform().setZPos(5);
     this.mPlatform.getXform().setSize(30, 3.75);
-    this.uperBound = atY+high;
-    this.lowerBound = atY;
+    this.rightBound = atX+wide;
+    this.leftBound = atX;
     this.dir = true;
     this.mFlag = type;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);
 
 }
-gEngine.Core.inheritPrototype(UpAndDownPlatform, GameObject);
+gEngine.Core.inheritPrototype(LeftAndRightPlatform, GameObject);
 
-UpAndDownPlatform.prototype.getFlag = function(){
+LeftAndRightPlatform.prototype.getFlag = function(){
   return this.mFlag;
 }
 
-UpAndDownPlatform.prototype.update = function (){
+LeftAndRightPlatform.prototype.update = function (){
   var xf = this.mPlatform.getXform();
   var speed = 0.05;
   if (this.dir){
-    xf.incYPosBy(speed);
+    xf.incXPosBy(speed);
   } else {
-    xf.incYPosBy(-speed);
+    xf.incXPosBy(-speed);
   }
-  if (xf.getYPos() >= this.uperBound ){
+  if (xf.getXPos() >= this.rightBound ){
     this.dir = false;
   }
-  if(xf.getYPos() <= this.lowerBound ){
+  if(xf.getXPos() <= this.leftBound ){
     this.dir = true;
   }
   var rigidShape = new RigidRectangle(xf,xf.getWidth() ,xf.getHeight());

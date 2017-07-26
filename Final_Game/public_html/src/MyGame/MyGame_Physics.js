@@ -12,7 +12,7 @@
 MyGame.prototype._physicsSimulation = function() {
 
     // Hero platform
-    gEngine.Physics.processObjSet(this.mHero, this.mBarriarSet);
+    // gEngine.Physics.processObjSet(this.mHero, this.mBarriarSet);
     // Hero Minion
     // gEngine.Physics.processObjSet(this.mHero, this.mAllMinions);
 
