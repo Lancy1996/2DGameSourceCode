@@ -1,5 +1,5 @@
 /*
- * File: Levelone.js
+ * File: Leveltwo.js
  * This is the logic of our game.
  */
 
@@ -11,8 +11,8 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Levelone() {
-    this.kBackGround = "assets/Levelone.json";
+function Leveltwo() {
+    this.kBackGround = "assets/Leveltwo.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
     this.mHero = null;
@@ -23,35 +23,35 @@ function Levelone() {
     this.mHpf = null;
     this.mHp = null;
 }
-gEngine.Core.inheritPrototype(Levelone, Scene);
+gEngine.Core.inheritPrototype(Leveltwo, Scene);
 
-Levelone.prototype.loadScene = function () {
+Leveltwo.prototype.loadScene = function () {
 
 };
 
-Levelone.prototype.unloadScene = function () {
+Leveltwo.prototype.unloadScene = function () {
   gEngine.TextFileLoader.unloadTextFile(this.kBackGround);
   if(gState === -1){
     var nextLevel = new GameOver();
   } else {
-  var nextLevel = new Leveltwo();
+  var nextLevel = new Levelthree();
 }
   gEngine.Core.startScene(nextLevel);
 };
 
-Levelone.prototype.initialize = function () {
+Leveltwo.prototype.initialize = function () {
   var jsonString = gEngine.ResourceMap.retrieveAsset(this.kBackGround);
   // two way to change a json to js object
   var sceneInfo = JSON.parse(jsonString);
   this.mCamera = new Camera(
-    [4,5],
-    40,
+    [-10,30],
+    70,
     [100,0,1180,720]
   );
 
   this.mCameraAll = new Camera(
     [50,50],
-    100,
+    170,
     [1080,520,200,200]
   );
 
@@ -62,7 +62,7 @@ Levelone.prototype.initialize = function () {
   );
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
-  this.mHero = new Hero(4,5,3,3);
+  this.mHero = new Hero(-10,30,4,4);
 
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
@@ -77,7 +77,7 @@ Levelone.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LRPlatform ){
-      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -86,7 +86,18 @@ Levelone.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Hp ){
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.NailSquare ){
+      obj = new Nail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Hp ){
       obj = new Hp(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -128,7 +139,7 @@ Levelone.prototype.initialize = function () {
   this.mHp.getXform().setSize(2, 2);
 };
 
-Levelone.prototype._initText = function (font, posX, posY, color, textH) {
+Leveltwo.prototype._initText = function (font, posX, posY, color, textH) {
     font.setColor(color);
     font.getXform().setPosition(posX, posY);
     font.setTextHeight(textH);
@@ -137,7 +148,7 @@ Levelone.prototype._initText = function (font, posX, posY, color, textH) {
 
 // This is the draw function, make sure to setup proper drawing environment, and more
 // importantly, make sure to _NOT_ change any state.
-Levelone.prototype.draw = function () {
+Leveltwo.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9 , 0.9 , 0.9, 1]);
 
     this.mCamera.setupViewProjection();
@@ -156,8 +167,7 @@ Levelone.prototype.draw = function () {
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
-Levelone.prototype.update = function () {
-    var deltaR = 1.2;
+Leveltwo.prototype.update = function () {
     this.mCamera.update();
     this.mHero.update(this.mBarriarSet);
     this.mBarriarSet.update();
@@ -178,7 +188,7 @@ Levelone.prototype.update = function () {
       gState = -1;
         gEngine.GameLoop.stop();
     }
-    if (gState === 2){
+    if (gState === 3){
       gEngine.GameLoop.stop();
     }
 };

@@ -1,4 +1,4 @@
-/* File: Platform.js
+/* File: Nail.js
  *
  * Creates and initializes a ploatform object
  */
@@ -9,13 +9,13 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function LeftAndRightPlatform(atX, atY,inColor,wide,type,dir) {
-    this.mPlatform = new Renderable();
+function LeftAndRightNail(atX, atY,inColor,wide,type,dir) {
+    this.mNail = new Renderable();
 
-    this.mPlatform.setColor(inColor);
-    this.mPlatform.getXform().setPosition(atX, atY);
-    this.mPlatform.getXform().setZPos(5);
-    this.mPlatform.getXform().setSize(30, 3.75);
+    this.mNail.setColor(inColor);
+    this.mNail.getXform().setPosition(atX, atY);
+    this.mNail.getXform().setZPos(5);
+    this.mNail.getXform().setSize(30, 3.75);
     if(dir){
     this.rightBound = atX+wide;
     this.leftBound = atX;
@@ -26,17 +26,17 @@ function LeftAndRightPlatform(atX, atY,inColor,wide,type,dir) {
     this.dir = dir;
     this.mFlag = type;
                                 // show each element for mAnimSpeed updates
-    GameObject.call(this, this.mPlatform);
+    GameObject.call(this, this.mNail);
 
 }
-gEngine.Core.inheritPrototype(LeftAndRightPlatform, GameObject);
+gEngine.Core.inheritPrototype(LeftAndRightNail, GameObject);
 
-LeftAndRightPlatform.prototype.getFlag = function(){
+LeftAndRightNail.prototype.getFlag = function(){
   return this.mFlag;
 }
 
-LeftAndRightPlatform.prototype.update = function (){
-  var xf = this.mPlatform.getXform();
+LeftAndRightNail.prototype.update = function (){
+  var xf = this.mNail.getXform();
   var speed = 0.1;
   if (this.dir){
     xf.incXPosBy(speed);

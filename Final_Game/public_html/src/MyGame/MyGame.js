@@ -15,14 +15,21 @@ var gHp = 3;
 var gState = 0;
 
 function MyGame() {
+  this.kStart = "assets/start.png";
   this.klevelone = "assets/Levelone.json";
+  this.kleveltwo = "assets/Leveltwo.json";
+  this.klevelthree = "assets/Levelthree.json";
+
+  this.kGameOver = "assets/GameOver.png";
+  this.kContinue = "assets/continue.png";
   this.rRun = "assets/rRun.png";//
   this.lRun = "assets/lRun.png";//
 
   this.rStand = "assets/rStand.png";//
   this.lStand = "assets/lStand.png";//
 
-  this.drop = "assets/Drop.png";//
+  this.rDrop = "assets/rDrop.png";//
+  this.lDrop = "assets/lDrop.png";//
 
   this.rClimb = "assets/rClimb.png";//
   this.lClimb = "assets/lClimb.png";//
@@ -33,6 +40,10 @@ function MyGame() {
   this.rJump = "assets/rJump.png";//
   this.lJump = "assets/lJump.png";//
 
+  this.kFontCon32 = "assets/fonts/Consolas-32";
+  this.pHp = "assets/Hp.png";
+
+  this.mBackground = null;
   this.animate = null;
   this.mCamera = null;
 }
@@ -40,21 +51,29 @@ gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
   gEngine.TextFileLoader.loadTextFile(this.klevelone, gEngine.TextFileLoader.eTextFileType.eTextFile);
+  gEngine.TextFileLoader.loadTextFile(this.kleveltwo, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.TextFileLoader.loadTextFile(this.klevelthree, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.Textures.loadTexture(this.kStart);
+    gEngine.Textures.loadTexture(this.kGameOver);
+    gEngine.Textures.loadTexture(this.kContinue);
     gEngine.Textures.loadTexture(this.rRun);
     gEngine.Textures.loadTexture(this.lRun);
     gEngine.Textures.loadTexture(this.rStand);
     gEngine.Textures.loadTexture(this.lStand);
-    gEngine.Textures.loadTexture(this.drop);
+    gEngine.Textures.loadTexture(this.rDrop);
+    gEngine.Textures.loadTexture(this.lDrop);
     gEngine.Textures.loadTexture(this.rClimb);
     gEngine.Textures.loadTexture(this.lClimb);
     gEngine.Textures.loadTexture(this.rDash);
     gEngine.Textures.loadTexture(this.lDash);
     gEngine.Textures.loadTexture(this.rJump);
     gEngine.Textures.loadTexture(this.lJump);
+    gEngine.Textures.loadTexture(this.pHp);
+
+    gEngine.Fonts.loadFont(this.kFontCon32);
 };
 
 MyGame.prototype.unloadScene = function () {
-  gState ++;
   if (gState === 1){
     var nextLevel = new Levelone();
   }
@@ -62,11 +81,17 @@ MyGame.prototype.unloadScene = function () {
 };
 
 MyGame.prototype.initialize = function () {
+  gHp = 3;
+  gState = 0;
+    this.mBackground = new SpriteRenderable(this.kStart);
+    this.mBackground.setColor([1,1,1,0]);
+    this.mBackground.getXform().setPosition(0,-0.5);
+    this.mBackground.getXform().setSize(10,10);
     this.animate = new SpriteAnimateRenderable(this.rRun);
     this.animate.setColor([1,1,1,0]);
     this.animate.getXform().setPosition(0,0);
-    this.animate.getXform().setSize(10,10);
-    this.animate.setSpriteSequence(128,0 ,
+    this.animate.getXform().setSize(2,2);
+    this.animate.setSpriteSequence(128,0,
                                    128,128,
                                    6,
                                    0);
@@ -74,7 +99,7 @@ MyGame.prototype.initialize = function () {
     this.animate.setAnimationSpeed(8);
     this.mCamera = new Camera([0,0],
       10,
-      [200,200,200,200]
+      [0,0,1280,720]
     );
     this.mCamera.setBackgroundColor([0.9 , 0.9, 0.9 , 0]);
 };
@@ -84,6 +109,7 @@ MyGame.prototype.initialize = function () {
 MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9 , 0.9 , 0.9, 1]);
     this.mCamera.setupViewProjection();
+    this.mBackground.draw(this.mCamera);
     this.animate.draw(this.mCamera);
 };
 
@@ -92,6 +118,7 @@ MyGame.prototype.draw = function () {
 MyGame.prototype.update = function () {
   this.animate.updateAnimation();
   if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
+      gState ++;
   gEngine.GameLoop.stop();
   }
 };

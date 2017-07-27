@@ -1,4 +1,4 @@
-/* File: Platform.js
+/* File: Nail.js
  *
  * Creates and initializes a ploatform object
  */
@@ -9,13 +9,13 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownPlatform(atX, atY,inColor,high,type,dir) {
-    this.mPlatform = new Renderable();
+function UpAndDownNail(atX, atY,inColor,high,type,dir) {
+    this.mNail = new Renderable();
 
-    this.mPlatform.setColor(inColor);
-    this.mPlatform.getXform().setPosition(atX, atY);
-    this.mPlatform.getXform().setZPos(5);
-    this.mPlatform.getXform().setSize(30, 3.75);
+    this.mNail.setColor(inColor);
+    this.mNail.getXform().setPosition(atX, atY);
+    this.mNail.getXform().setZPos(5);
+    this.mNail.getXform().setSize(30, 3.75);
     if (dir){
       this.uperBound = atY+high;
       this.lowerBound = atY;
@@ -27,17 +27,17 @@ function UpAndDownPlatform(atX, atY,inColor,high,type,dir) {
     this.dir = dir;
     this.mFlag = type;
                                 // show each element for mAnimSpeed updates
-    GameObject.call(this, this.mPlatform);
+    GameObject.call(this, this.mNail);
 
 }
-gEngine.Core.inheritPrototype(UpAndDownPlatform, GameObject);
+gEngine.Core.inheritPrototype(UpAndDownNail, GameObject);
 
-UpAndDownPlatform.prototype.getFlag = function(){
+UpAndDownNail.prototype.getFlag = function(){
   return this.mFlag;
 };
 
-UpAndDownPlatform.prototype.update = function (){
-  var xf = this.mPlatform.getXform();
+UpAndDownNail.prototype.update = function (){
+  var xf = this.mNail.getXform();
   var speed = 0.1;
   if (this.dir){
     xf.incYPosBy(speed);
