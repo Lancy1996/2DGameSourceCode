@@ -1,4 +1,4 @@
-/* 
+/*
  * File: RigidShape.js
  * Defines a simple rigid shape
  */
@@ -18,16 +18,16 @@ RigidShape.eRigidType = Object.freeze({
 function RigidShape(xform) {
     this.mXform = xform; // this is typically from gameObject
     this.kPadding = 0.25; // size of the position mark
-    
+
     this.mPositionMark = new LineRenderable();
-    
+
     this.mDrawBounds = false;
-    
+
     // physical properties
     this.mInvMass = 1;
-    this.mRestitution = 0.8;
+    this.mRestitution = 0;
     this.mVelocity = vec2.fromValues(0, 0);
-    this.mFriction = 0.3;
+    this.mFriction = 3;
     this.mAcceleration = gEngine.Physics.getSystemtAcceleration();
 }
 
@@ -39,26 +39,26 @@ RigidShape.prototype.draw = function (aCamera) {
     if (!this.mDrawBounds) {
         return;
     }
-    
+
     //calculation for the X at the center of the shape
     var x = this.mXform.getXPos();
     var y = this.mXform.getYPos();
-    
+
     this.mPositionMark.setFirstVertex(x - this.kPadding, y + this.kPadding);  //TOP LEFT
     this.mPositionMark.setSecondVertex(x + this.kPadding, y - this.kPadding); //BOTTOM RIGHT
     this.mPositionMark.draw(aCamera);
-    
+
     this.mPositionMark.setFirstVertex(x + this.kPadding, y + this.kPadding);  //TOP RIGHT
-    this.mPositionMark.setSecondVertex(x - this.kPadding, y - this.kPadding); //BOTTOM LEFT   
+    this.mPositionMark.setSecondVertex(x - this.kPadding, y - this.kPadding); //BOTTOM LEFT
     this.mPositionMark.draw(aCamera);
-    
+
 };
 
-RigidShape.prototype.getPosition = function() { 
-    return this.mXform.getPosition(); 
+RigidShape.prototype.getPosition = function() {
+    return this.mXform.getPosition();
 };
-RigidShape.prototype.setPosition = function(x, y ) { 
-    this.mXform.setPosition(x, y); 
+RigidShape.prototype.setPosition = function(x, y ) {
+    this.mXform.setPosition(x, y);
 };
 RigidShape.prototype.getXform = function () { return this.mXform; };
 RigidShape.prototype.setXform = function (xform) { this.mXform = xform; };

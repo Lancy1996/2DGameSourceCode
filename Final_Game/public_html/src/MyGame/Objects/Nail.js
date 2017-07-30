@@ -10,12 +10,13 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Nail(atX, atY,inColor,type) {
-    this.mPlatform = new Renderable();
+    this.pHp = "assets/Hp.png";
+    this.mPlatform = new SpriteRenderable(this.pHp);
 
     this.mPlatform.setColor(inColor);
     this.mPlatform.getXform().setPosition(atX, atY);
     this.mPlatform.getXform().setZPos(5);
-    this.mPlatform.getXform().setSize(30, 3.75);
+    this.mPlatform.getXform().setSize(1, 1);
     this.mFlag = type;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);

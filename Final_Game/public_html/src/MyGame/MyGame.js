@@ -19,9 +19,15 @@ function MyGame() {
   this.klevelone = "assets/Levelone.json";
   this.kleveltwo = "assets/Leveltwo.json";
   this.klevelthree = "assets/Levelthree.json";
+  // this.klevelfour = "assets/Levelfour.json";
+  // this.klevelfive = "assets/Levelfive.json";
+  // this.klevelsix = "assets/Levelsix.json";
+  // this.klevelseven = "assets/Levelseven.json";
+  this.ktest = "assets/Map/Level1.json";
 
   this.kGameOver = "assets/GameOver.png";
   this.kContinue = "assets/continue.png";
+
   this.rRun = "assets/rRun.png";//
   this.lRun = "assets/lRun.png";//
 
@@ -42,6 +48,7 @@ function MyGame() {
 
   this.kFontCon32 = "assets/fonts/Consolas-32";
   this.pHp = "assets/Hp.png";
+  // this.mSpring = "";
 
   this.mBackground = null;
   this.animate = null;
@@ -50,9 +57,15 @@ function MyGame() {
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-  gEngine.TextFileLoader.loadTextFile(this.klevelone, gEngine.TextFileLoader.eTextFileType.eTextFile);
-  gEngine.TextFileLoader.loadTextFile(this.kleveltwo, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.TextFileLoader.loadTextFile(this.klevelone, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.TextFileLoader.loadTextFile(this.kleveltwo, gEngine.TextFileLoader.eTextFileType.eTextFile);
     gEngine.TextFileLoader.loadTextFile(this.klevelthree, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    // gEngine.TextFileLoader.loadTextFile(this.klevelfour, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    // gEngine.TextFileLoader.loadTextFile(this.klevelfive, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    // gEngine.TextFileLoader.loadTextFile(this.klevelsix, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    // gEngine.TextFileLoader.loadTextFile(this.klevelseven, gEngine.TextFileLoader.eTextFileType.eTextFile);
+    gEngine.TextFileLoader.loadTextFile(this.ktest, gEngine.TextFileLoader.eTextFileType.eTextFile);
+
     gEngine.Textures.loadTexture(this.kStart);
     gEngine.Textures.loadTexture(this.kGameOver);
     gEngine.Textures.loadTexture(this.kContinue);
@@ -69,6 +82,7 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.rJump);
     gEngine.Textures.loadTexture(this.lJump);
     gEngine.Textures.loadTexture(this.pHp);
+    // gEngine.Textures.loadTexture(this.mSpring);
 
     gEngine.Fonts.loadFont(this.kFontCon32);
 };

@@ -86,13 +86,13 @@ function Hero(atX, atY,atW,atH) {
     this.mRClimbing.setColor([0, 0, 0, 1]);  // tints red
     this.mRClimbing.getXform().setPosition(atX, atY);
     this.mRClimbing.getXform().setSize(atW-1,atH-1);
-    this.mRClimbing.setElementPixelPositions(0,48,0,64);
+    this.mRClimbing.setElementPixelPositions(0,54,0,64);
 
     this.mLClimbing = new SpriteRenderable(this.lClimb);
     this.mLClimbing.setColor([0, 0, 0, 1]);  // tints red
     this.mLClimbing.getXform().setPosition(atX, atY);
     this.mLClimbing.getXform().setSize(atW-1,atH-1);
-    this.mLClimbing.setElementPixelPositions(12,64,0,64);
+    this.mLClimbing.setElementPixelPositions(10,64,0,64);
 
     this.mRDashing = new SpriteRenderable(this.rDash);
     this.mRDashing.setColor([0, 0, 0, 1]);  // tints red
@@ -142,10 +142,10 @@ function Hero(atX, atY,atW,atH) {
     this.matY = atY;
     this.matW = atW;
     this.matH = atH;
-    var r = new RigidRectangle(this.getXform(), atW,atH);
+    var r = new RigidRectangle(this.getXform(), atW*0.5,atH);
     r.setMass(0.7);  // less dense than Minions
     r.setRestitution(0.3);
-    r.setColor([0, 1, 0, 0]);
+    r.setColor([0, 1, 0, 1]);
     r.setDrawBounds(true);
     this.setPhysicsComponent(r);
 }
@@ -162,39 +162,39 @@ Hero.prototype.update = function (BarriarSet) {
 
 
     this.check(BarriarSet);
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 1) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space) && this.mJumpFlag === 1) {
         v[1] = 30;
         this.mJumpFlag = -1;
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.W) && this.mJumpFlag === 0) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Space) && this.mJumpFlag === 0) {
         v[1] = 30;
         this.mJumpFlag = 1;
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.S)) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Down) && !this.isClimb) {
         var tempv = v;
         this.mDye.getXform().setSize(this.matW,this.matH/2);
         var r = new RigidRectangle(this.getXform(), this.matW, this.matH/2);
         r.setMass(0.7);  // less dense than Minions
         r.setRestitution(0.3);
-        r.setColor([0, 1, 0, 0]);
+        r.setColor([0, 1, 0, 1]);
         r.setDrawBounds(true);
         this.setPhysicsComponent(r);
         this.mdown = true;
         v = tempv;
     }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.A)) {
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
         v[0] = -13;
         this.mLR = false;
     }
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)) {
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
         v[0] = 13;
         this.mLR = true;
     }
-    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.A) && v[0] < 0) {
-        v[0] += 0.2;
+    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.Left) && v[0] < 0) {
+        v[0] = 0;
     }
-    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.D) && v[0] > 0 ) {
-        v[0] -= 0.2;
+    if (!gEngine.Input.isKeyPressed(gEngine.Input.keys.Right) && v[0] > 0 ) {
+        v[0] = 0
     }
     if (this.mdown){
       this.mtimeout --;
@@ -204,7 +204,7 @@ Hero.prototype.update = function (BarriarSet) {
     if (this.mtimeout === 0){
       var tempv = v[0];
       this.mDye.getXform().setSize(this.matW,this.matH);
-      var r = new RigidRectangle(this.getXform(),this.matW,this.matH);
+      var r = new RigidRectangle(this.getXform(),this.matW*0.5,this.matH);
       r.setMass(0.7);  // less dense than Minions
       r.setRestitution(0.3);
       r.setColor([0, 1, 0, 0]);
@@ -242,7 +242,7 @@ Hero.prototype.update = function (BarriarSet) {
         this.mHeroState = 7;
       }
     }
-    if(this.mdown){
+    if(this.mdown && !this.isClimb){
       if(this.mLR){
         this.mHeroState = 8;
       } else {
@@ -316,27 +316,54 @@ Hero.prototype.check = function ( BarriarSet ){
   var xf = this.mDye.getXform();
   for (i = 0;i < tBarriarSet.size();i++){
     var Bxf = tBarriarSet.getObjectAt(i).getXform();
-    if(tBarriarSet.getObjectAt(i).getFlag() === 0 )
-      continue;
+    if(tBarriarSet.getObjectAt(i).getFlag() === 0 ){
+      if (Math.abs((xf.getXPos() - Bxf.getXPos())) <= ((xf.getWidth() + Bxf.getWidth())/2) &&
+          Math.abs((xf.getXPos() - Bxf.getXPos())) >= (Bxf.getWidth())/2){
+          if (xf.getYPos() > ((Bxf.getYPos() - Bxf.getHeight()/2)+0.1) &&
+            xf.getYPos() < (Bxf.getYPos() + Bxf.getHeight()/2 + xf.getHeight()/2 -0.05)){
+              this.isClimb = false;
+              continue;
+          }
+      }
+    }
     if(tBarriarSet.getObjectAt(i).getFlag() === 1){
-      if (xf.getYPos() > (Bxf.getYPos() - Bxf.getHeight()/2 - xf.getHeight()/2) &&
-          xf.getYPos() < (Bxf.getYPos() + Bxf.getHeight()/2 + xf.getHeight()/2 )){
-          if (Math.abs((xf.getXPos() - Bxf.getXPos())) <= ((xf.getWidth() + Bxf.getWidth())/2) &&
-              Math.abs((xf.getXPos() - Bxf.getXPos())) >= (Bxf.getWidth())/2-1){
-              if(gEngine.Input.isKeyPressed(gEngine.Input.keys.W)){
+      if (Math.abs((xf.getXPos() - Bxf.getXPos())) <= ((xf.getWidth() + Bxf.getWidth())/2) &&
+          Math.abs((xf.getXPos() - Bxf.getXPos())) >= (Bxf.getWidth())/2){
+          if (xf.getYPos() > ((Bxf.getYPos() - Bxf.getHeight()/2)+0.1) &&
+            xf.getYPos() < (Bxf.getYPos() + Bxf.getHeight()/2 + xf.getHeight()/2 -0.05)){
+                this.isClimb = true;
+                v[1] = 0;
+              if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)){
                 v[1] = 10;
                 this.mJumpFlag = 0;
-                this.isClimb = true;
+              }
+              if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)){
+                v[1] = -10;
+                this.mJumpFlag = 0;
               }
           } else {
            this.isClimb = false;
            }
       }
     }
+    if(tBarriarSet.getObjectAt(i).getFlag() === 2 ){
+      if ((xf.getYPos() - Bxf.getYPos() ) < ((xf.getHeight() + Bxf.getHeight())/2) && (xf.getYPos() - Bxf.getYPos() ) > xf.getHeight() &&
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+          xf.setYPos(Bxf.getYPos() + ((xf.getHeight() + Bxf.getHeight())/2));
+          this.mHeroState = 0;
+      }
+    }
+    if(tBarriarSet.getObjectAt(i).getFlag() === 3 ){
+      if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+        // xf.setXPos(Bxf.getXPos());
+          this.mHeroState = 0;
+      }
+    }
 
     if(tBarriarSet.getObjectAt(i).getFlag() === 4 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
-      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth()/2 + Bxf.getWidth())/2)) {
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
@@ -345,7 +372,7 @@ Hero.prototype.check = function ( BarriarSet ){
     }
     if(tBarriarSet.getObjectAt(i).getFlag() === 5 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
-      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth()/2 + Bxf.getWidth())/2)) {
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
@@ -354,7 +381,7 @@ Hero.prototype.check = function ( BarriarSet ){
     }
     if(tBarriarSet.getObjectAt(i).getFlag() === 6 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
-      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth()/2 + Bxf.getWidth())/2)) {
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
@@ -379,6 +406,13 @@ Hero.prototype.check = function ( BarriarSet ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
         gState ++;
+        break;
+      }
+    }
+    if(tBarriarSet.getObjectAt(i).getFlag() === 10 ){
+      if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+        this.mDye.getXform().setPosition(tBarriarSet.getObjectAt(i).getEnd());
         break;
       }
     }

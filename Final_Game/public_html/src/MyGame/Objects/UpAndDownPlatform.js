@@ -9,7 +9,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownPlatform(atX, atY,inColor,high,type,dir) {
+function UpAndDownPlatform(atX, atY,inColor,high,type,dir/*,speed*/) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);
@@ -26,6 +26,7 @@ function UpAndDownPlatform(atX, atY,inColor,high,type,dir) {
 
     this.dir = dir;
     this.mFlag = type;
+    // this.mSpeed = speed;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);
 
@@ -35,6 +36,10 @@ gEngine.Core.inheritPrototype(UpAndDownPlatform, GameObject);
 UpAndDownPlatform.prototype.getFlag = function(){
   return this.mFlag;
 };
+
+// UpAndDownPlatform.prototype.getSpeed = function(){
+//   return this.mSpeed;
+// };
 
 UpAndDownPlatform.prototype.update = function (){
   var xf = this.mPlatform.getXform();

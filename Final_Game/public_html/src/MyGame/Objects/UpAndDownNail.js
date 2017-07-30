@@ -9,8 +9,9 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownNail(atX, atY,inColor,high,type,dir) {
-    this.mNail = new Renderable();
+function UpAndDownNail(atX, atY,inColor,high,type,dir/*,speed*/) {
+    this.pHp = "assets/Hp.png";
+    this.mNail = new SpriteRenderable(this.pHp);
 
     this.mNail.setColor(inColor);
     this.mNail.getXform().setPosition(atX, atY);
@@ -26,6 +27,7 @@ function UpAndDownNail(atX, atY,inColor,high,type,dir) {
 
     this.dir = dir;
     this.mFlag = type;
+    this.mSpeed = speed;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mNail);
 
@@ -35,6 +37,10 @@ gEngine.Core.inheritPrototype(UpAndDownNail, GameObject);
 UpAndDownNail.prototype.getFlag = function(){
   return this.mFlag;
 };
+
+// UpAndDownNail.prototype.getSpeed = function(){
+//   return this.mSpeed;
+// };
 
 UpAndDownNail.prototype.update = function (){
   var xf = this.mNail.getXform();

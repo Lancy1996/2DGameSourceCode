@@ -22,6 +22,7 @@ function Levelone() {
     this.mMainView = null;
     this.mHpf = null;
     this.mHp = null;
+    this.jstate = 0;
 }
 gEngine.Core.inheritPrototype(Levelone, Scene);
 
@@ -62,7 +63,7 @@ Levelone.prototype.initialize = function () {
   );
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
-  this.mHero = new Hero(4,5,3,3);
+  this.mHero = new Hero(3,5,3,3);
 
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
@@ -106,11 +107,34 @@ Levelone.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    }  else {
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Spring ){
+      obj = new Spring(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Portal ){
+      obj = new Portal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag,sceneInfo.Square[i].End);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+     }
+     else {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width-2, sceneInfo.Square[i].Height);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
       rigidShape.setMass(0);  // ensures no movements!
       rigidShape.setDrawBounds(true);
       rigidShape.setColor([1, 1, 1, 0]);
@@ -161,7 +185,29 @@ Levelone.prototype.update = function () {
     this.mCamera.update();
     this.mHero.update(this.mBarriarSet);
     this.mBarriarSet.update();
-    this.mCamera.panWith(this.mHero.getXform(), 0.6);
+    this.mCamera.panWith(this.mHero.getXform(), 0.3);
+
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S) && this.jstate === 0){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.I) && this.jstate === 1){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.X) && this.jstate === 2){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.G) && this.jstate === 3){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.O) && this.jstate === 4){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.D) && this.jstate === 5){
+      this.jstate ++;
+    }
+    if (this.jstate === 6){
+      gState ++;
+    }
     // var xform = this.mGoal.getXform();
     // xform.incRotationByDegree(deltaR);
     // var WC = this.mCamera.getWCCenter();

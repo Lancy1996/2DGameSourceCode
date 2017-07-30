@@ -10,7 +10,8 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Hp(atX, atY,inColor,type) {
-    this.mPlatform = new Renderable();
+    this.pHp = "assets/Hp.png";
+    this.mPlatform = new SpriteRenderable(this.pHp);
 
     this.mPlatform.setColor(inColor);
     this.mPlatform.getXform().setPosition(atX, atY);

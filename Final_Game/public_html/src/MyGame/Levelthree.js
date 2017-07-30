@@ -22,6 +22,7 @@ function Levelthree() {
     this.mMainView = null;
     this.mHpf = null;
     this.mHp = null;
+    this.jstate = 0;
 }
 gEngine.Core.inheritPrototype(Levelthree, Scene);
 
@@ -62,7 +63,7 @@ Levelthree.prototype.initialize = function () {
   );
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
-  this.mHero = new Hero(-10,30,5,5);
+  this.mHero = new Hero(50,50,5,5);
 
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
@@ -140,7 +141,7 @@ Levelthree.prototype.initialize = function () {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width-2, sceneInfo.Square[i].Height);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
       rigidShape.setMass(0);  // ensures no movements!
       rigidShape.setDrawBounds(true);
       rigidShape.setColor([1, 1, 1, 0]);
@@ -189,7 +190,29 @@ Levelthree.prototype.update = function () {
     this.mCamera.update();
     this.mHero.update(this.mBarriarSet);
     this.mBarriarSet.update();
-    this.mCamera.panWith(this.mHero.getXform(), 0.6);
+    this.mCamera.panWith(this.mHero.getXform(), 0.3);
+
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S) && this.jstate === 0){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.I) && this.jstate === 1){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.X) && this.jstate === 2){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.G) && this.jstate === 3){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.O) && this.jstate === 4){
+      this.jstate ++;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.D) && this.jstate === 5){
+      this.jstate ++;
+    }
+    if (this.jstate === 6){
+      gState ++;
+    }
     // var xform = this.mGoal.getXform();
     // xform.incRotationByDegree(deltaR);
     // var WC = this.mCamera.getWCCenter();
