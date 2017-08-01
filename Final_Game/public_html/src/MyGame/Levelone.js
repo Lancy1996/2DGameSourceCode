@@ -12,10 +12,10 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Levelone() {
-    this.kBackGround = "assets/Levelone.json";
+    this.kBackGround = "assets/Map/Levelone.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
-    this.mHero = null;
+    this.kBgm = "assets/bgm/bgm.mp3";
     this.mCamera = null;
     this.mCameraAll = null;
     this.mBarriarSet = new GameObjectSet();
@@ -23,6 +23,7 @@ function Levelone() {
     this.mHpf = null;
     this.mHp = null;
     this.jstate = 0;
+    this.background = null;
 }
 gEngine.Core.inheritPrototype(Levelone, Scene);
 
@@ -41,6 +42,7 @@ Levelone.prototype.unloadScene = function () {
 };
 
 Levelone.prototype.initialize = function () {
+  gEngine.AudioClips.playBackgroundAudio(this.kBgm);
   var jsonString = gEngine.ResourceMap.retrieveAsset(this.kBackGround);
   // two way to change a json to js object
   var sceneInfo = JSON.parse(jsonString);
@@ -49,18 +51,18 @@ Levelone.prototype.initialize = function () {
     40,
     [100,0,1180,720]
   );
-
+    this.mCamera.setBackgroundColor([0.9 , 0.9, 0.9 , 0]);
   this.mCameraAll = new Camera(
     [50,50],
     100,
     [1080,520,200,200]
   );
-
   this.mCamerafonts = new Camera(
     [0,0],
     10,
     [0,680,100,50]
   );
+
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
   this.mHero = new Hero(3,5,3,3);
@@ -68,7 +70,7 @@ Levelone.prototype.initialize = function () {
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
     if(sceneInfo.Square[i].Tag === sceneInfo.Type.UDPlatform){
-      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -78,7 +80,7 @@ Levelone.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LRPlatform ){
-      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -97,7 +99,7 @@ Levelone.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Goal ){
+    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Goal ){
       obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -107,30 +109,7 @@ Levelone.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    }
-    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Spring ){
-      obj = new Spring(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
-      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-      rigidShape.setMass(0);  // ensures no movements!
-      rigidShape.setDrawBounds(true);
-      rigidShape.setColor([1, 1, 1, 0]);
-      obj.setPhysicsComponent(rigidShape);
-      this.mBarriarSet.addToSet(obj);
-    }
-    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Portal ){
-      obj = new Portal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag,sceneInfo.Square[i].End);
-      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-      rigidShape.setMass(0);  // ensures no movements!
-      rigidShape.setDrawBounds(true);
-      rigidShape.setColor([1, 1, 1, 0]);
-      obj.setPhysicsComponent(rigidShape);
-      this.mBarriarSet.addToSet(obj);
-     }
-     else {
+    } else {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -168,6 +147,7 @@ Levelone.prototype.draw = function () {
     this.mHero.draw(this.mCamera);
     this.mBarriarSet.draw(this.mCamera);
 
+
     this.mCamerafonts.setupViewProjection();
     this.mHpf.draw(this.mCamerafonts);
     this.mHp.draw(this.mCamerafonts);
@@ -175,6 +155,7 @@ Levelone.prototype.draw = function () {
     this.mCameraAll.setupViewProjection();
     this.mHero.draw(this.mCameraAll);
     this.mBarriarSet.draw(this.mCameraAll);
+
 
 };
 

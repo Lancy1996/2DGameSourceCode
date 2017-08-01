@@ -29,25 +29,29 @@ function Hero(atX, atY,atW,atH) {
 
     this.rJump = "assets/rJump.png";//
     this.lJump = "assets/lJump.png";//
+
+    this.kmp = "assets/bgm/Music_Portal.wav";
+    this.ksf = "assets/bgm/sfx_fail.wav";
+    this.ksg = "assets/bgm/sfx_goal.wav";
     // if (normalMap !== null) {
     //     this.mDye = new IllumRenderable(spriteTexture, normalMap);
     // } else {
     //     this.mDye = new LightRenderable(spriteTexture);
     // }
     this.mDye = new SpriteRenderable(this.rStand);
-    this.mDye.setColor([0, 0, 0, 1]);  // tints red
+    this.mDye.setColor([1, 1, 1, 0]);  // tints red
     this.mDye.getXform().setPosition(atX, atY);
     this.mDye.getXform().setSize(atW, atH);
     this.mDye.setElementPixelPositions(0,128,17,120);
 
     this.mlStanding = new SpriteRenderable(this.lStand);
-    this.mlStanding.setColor([0, 0, 0, 1]);  // tints red
+    this.mlStanding.setColor([0, 0, 0, 0]);  // tints red
     this.mlStanding.getXform().setPosition(atX, atY);
     this.mlStanding.getXform().setSize(atW,atH);
     this.mlStanding.setElementPixelPositions(0,128,17,120);
 
     this.mRRunning = new SpriteAnimateRenderable(this.rRun);
-    this.mRRunning.setColor([0, 0, 0, 1]);
+    this.mRRunning.setColor([0, 0, 0, 0]);
     this.mRRunning.getXform().setPosition(atX, atY);
     this.mRRunning.getXform().setZPos(5);
     this.mRRunning.getXform().setSize(atW,atH);
@@ -59,7 +63,7 @@ function Hero(atX, atY,atW,atH) {
     this.mRRunning.setAnimationSpeed(6);
 
     this.mLRunning = new SpriteAnimateRenderable(this.lRun);
-    this.mLRunning.setColor([0, 0, 0, 1]);
+    this.mLRunning.setColor([0, 0, 0, 0]);
     this.mLRunning.getXform().setPosition(atX, atY);
     this.mLRunning.getXform().setZPos(5);
     this.mLRunning.getXform().setSize(atW,atH);
@@ -71,25 +75,25 @@ function Hero(atX, atY,atW,atH) {
     this.mLRunning.setAnimationSpeed(6);
 
     this.mRDropping = new SpriteRenderable(this.rDrop);
-    this.mRDropping.setColor([0, 0, 0, 1]);  // tints red
+    this.mRDropping.setColor([0, 0, 0, 0]);  // tints red
     this.mRDropping.getXform().setPosition(atX, atY);
     this.mRDropping.getXform().setSize(atW,atH);
     this.mRDropping.setElementPixelPositions(0,128,17,120);
 
     this.mLDropping = new SpriteRenderable(this.lDrop);
-    this.mLDropping.setColor([0, 0, 0, 1]);  // tints red
+    this.mLDropping.setColor([0, 0, 0, 0]);  // tints red
     this.mLDropping.getXform().setPosition(atX, atY);
     this.mLDropping.getXform().setSize(atW,atH);
     this.mLDropping.setElementPixelPositions(0,128,17,120);
 
     this.mRClimbing = new SpriteRenderable(this.rClimb);
-    this.mRClimbing.setColor([0, 0, 0, 1]);  // tints red
+    this.mRClimbing.setColor([0, 0, 0, 0]);  // tints red
     this.mRClimbing.getXform().setPosition(atX, atY);
     this.mRClimbing.getXform().setSize(atW-1,atH-1);
     this.mRClimbing.setElementPixelPositions(0,54,0,64);
 
     this.mLClimbing = new SpriteRenderable(this.lClimb);
-    this.mLClimbing.setColor([0, 0, 0, 1]);  // tints red
+    this.mLClimbing.setColor([0, 0, 0, 0]);  // tints red
     this.mLClimbing.getXform().setPosition(atX, atY);
     this.mLClimbing.getXform().setSize(atW-1,atH-1);
     this.mLClimbing.setElementPixelPositions(10,64,0,64);
@@ -145,7 +149,7 @@ function Hero(atX, atY,atW,atH) {
     var r = new RigidRectangle(this.getXform(), atW*0.5,atH);
     r.setMass(0.7);  // less dense than Minions
     r.setRestitution(0.3);
-    r.setColor([0, 1, 0, 1]);
+    r.setColor([0, 0, 0, 0]);
     r.setDrawBounds(true);
     this.setPhysicsComponent(r);
 }
@@ -228,7 +232,7 @@ Hero.prototype.update = function (BarriarSet) {
         this.mHeroState = 3;
       }
     }
-    if (v[1] <= -10){
+    if (v[1] <= -2){
       if(this.mLR){
         this.mHeroState = 4;
       } else {
@@ -349,14 +353,14 @@ Hero.prototype.check = function ( BarriarSet ){
     if(tBarriarSet.getObjectAt(i).getFlag() === 2 ){
       if ((xf.getYPos() - Bxf.getYPos() ) < ((xf.getHeight() + Bxf.getHeight())/2) && (xf.getYPos() - Bxf.getYPos() ) > xf.getHeight() &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
-          xf.setYPos(Bxf.getYPos() + ((xf.getHeight() + Bxf.getHeight())/2));
+          xf.incYPosBy(tBarriarSet.getObjectAt(i).getSpeed());
           this.mHeroState = 0;
       }
     }
     if(tBarriarSet.getObjectAt(i).getFlag() === 3 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
-        // xf.setXPos(Bxf.getXPos());
+          xf.incXPosBy(tBarriarSet.getObjectAt(i).getSpeed());
           this.mHeroState = 0;
       }
     }
@@ -367,6 +371,7 @@ Hero.prototype.check = function ( BarriarSet ){
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
+        gEngine.AudioClips.playACue(this.ksf);
         gHp --;
       }
     }
@@ -376,6 +381,7 @@ Hero.prototype.check = function ( BarriarSet ){
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
+        gEngine.AudioClips.playACue(this.ksf);
         gHp --;
       }
     }
@@ -385,6 +391,7 @@ Hero.prototype.check = function ( BarriarSet ){
         v[0] = 0;v[1] = 0;
           this.mHeroState = 0;
         xf.setPosition(this.matX,this.matY);
+        gEngine.AudioClips.playACue(this.ksf);
         gHp --;
       }
     }
@@ -399,12 +406,13 @@ Hero.prototype.check = function ( BarriarSet ){
     if(tBarriarSet.getObjectAt(i).getFlag() === 8 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
-        v[1] = 100;
+        v[1] = 105;
       }
     }
     if(tBarriarSet.getObjectAt(i).getFlag() === 9 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+        gEngine.AudioClips.playACue(this.ksg);
         gState ++;
         break;
       }
@@ -412,8 +420,28 @@ Hero.prototype.check = function ( BarriarSet ){
     if(tBarriarSet.getObjectAt(i).getFlag() === 10 ){
       if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
       ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
-        this.mDye.getXform().setPosition(tBarriarSet.getObjectAt(i).getEnd());
+        var pst = tBarriarSet.getObjectAt(i).getEnd();
+        gEngine.AudioClips.playACue(this.kmp);
+        this.mDye.getXform().setPosition(pst[0],pst[1]);
         break;
+      }
+    }
+    if(tBarriarSet.getObjectAt(i).getFlag() === 11 ){
+      if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+        v[0] = 0;v[1] = 0;
+          this.mHeroState = 0;
+        xf.setPosition(this.matX,this.matY);
+        gHp --;
+      }
+    }
+    if(tBarriarSet.getObjectAt(i).getFlag() === 12 ){
+      if ( Math.abs((xf.getYPos() - Bxf.getYPos() ) ) < ((xf.getHeight() + Bxf.getHeight())/2) &&
+      ( Math.abs((xf.getXPos() - Bxf.getXPos() ) ) < (xf.getWidth() + Bxf.getWidth())/2)) {
+        v[0] = 0;v[1] = 0;
+          this.mHeroState = 0;
+        xf.setPosition(this.matX,this.matY);
+        gHp = 0;
       }
     }
 
@@ -429,4 +457,4 @@ Hero.prototype.check = function ( BarriarSet ){
     }
 
   }
-}
+};

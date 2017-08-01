@@ -1,36 +1,33 @@
-/* File: Death.js
+/* File: Platform.js
  *
- * Creates a Death object
+ * Creates and initializes a ploatform object
  */
 
-/*jslint node: true, vars: true, white: true */
-/*global gEngine, GameObject, TextureRenderable, RigidCircle*/
+/*jslint node: true, vars: true */
+/*global gEngine, GameObject, TextureRenderable, RigidRectangle */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function Death(texture, atX, atY) {
+function Death(atX, atY,inColor,type) {
+    this.pDeath = "assets/Enemy.png";
+    this.mPlatform = new SpriteRenderable(this.pDeath);
 
-    this.mDeath = new TextureRenderable(texture);
-
-    this.mDeath.setColor([1, 1, 1, 0]);
-    this.mDeath.getXform().setPosition(atX, atY);
-    this.mDeath.getXform().setSize(4, 3);
+    this.mPlatform.setColor(inColor);
+    this.mPlatform.getXform().setPosition(atX, atY);
+    this.mPlatform.getXform().setZPos(5);
+    this.mPlatform.getXform().setSize(30, 3.75);
+    this.mFlag = type;
                                 // show each element for mAnimSpeed updates
-    GameObject.call(this, this.mDeath);
-    this.setSpeed(0.5);
-    this.setCurrentFrontDir([1, 0]);
+    GameObject.call(this, this.mPlatform);
 
-    var rigidShape = new RigidCircle(this.getXform(), 1.5);
-    rigidShape.setMass(0.1);
-    rigidShape.setAcceleration([0, 0]);
-    // rigidShape.setDrawBounds(true);
-    this.setPhysicsComponent(rigidShape);
 }
 gEngine.Core.inheritPrototype(Death, GameObject);
 
+Death.prototype.getFlag = function(){
+  return this.mFlag;
+}
 
-Death.prototype.update = function () {
-    GameObject.prototype.update.call(this);
-    // remember to update this.mMinion's animation
+Death.prototype.update = function (){
+
 };

@@ -10,9 +10,8 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Spring(atX, atY,inColor,type) {
-    // this.mpic = "";
-    // this.mSpring = new SpriteRenderable();
-    this.mSpring = new Renderable();
+    this.mpic = "assets/spring.png";
+    this.mSpring = new SpriteRenderable(this.mpic);
     this.mSpring.setColor(inColor);
     this.mSpring.getXform().setPosition(atX, atY);
     this.mSpring.getXform().setZPos(5);

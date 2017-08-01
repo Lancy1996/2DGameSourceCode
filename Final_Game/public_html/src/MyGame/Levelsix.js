@@ -12,7 +12,7 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Levelsix() {
-    this.kBackGround = "assets/Levelsix.json";
+    this.kBackGround = "assets/Map/Levelsix.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
     this.mHero = null;
@@ -31,11 +31,12 @@ Levelsix.prototype.loadScene = function () {
 };
 
 Levelsix.prototype.unloadScene = function () {
+  gEngine.AudioClips.stopBackgroundAudio();
   gEngine.TextFileLoader.unloadTextFile(this.kBackGround);
   if(gState === -1){
     var nextLevel = new GameOver();
   } else {
-  var nextLevel = new Leveltwo();
+  var nextLevel = new Levelseven();
 }
   gEngine.Core.startScene(nextLevel);
 };
@@ -52,7 +53,7 @@ Levelsix.prototype.initialize = function () {
 
   this.mCameraAll = new Camera(
     [50,50],
-    100,
+    150,
     [1080,520,200,200]
   );
 
@@ -97,8 +98,19 @@ Levelsix.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Goal ){
-      obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.UDNail ){
+      obj = new UpAndDownNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LRNail ){
+      obj = new LeftAndRightNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -108,28 +120,37 @@ Levelsix.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     }
-    // else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Spring ){
-    //   obj = new Spring(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
-    //   obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-    //   obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-    //   var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-    //   rigidShape.setMass(0);  // ensures no movements!
-    //   rigidShape.setDrawBounds(true);
-    //   rigidShape.setColor([1, 1, 1, 0]);
-    //   obj.setPhysicsComponent(rigidShape);
-    //   this.mBarriarSet.addToSet(obj);
-    // }
-    // else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Portal ){
-    //   obj = new Portal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag,sceneInfo.Square[i].End);
-    //   obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-    //   obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-    //   var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-    //   rigidShape.setMass(0);  // ensures no movements!
-    //   rigidShape.setDrawBounds(true);
-    //   rigidShape.setColor([1, 1, 1, 0]);
-    //   obj.setPhysicsComponent(rigidShape);
-    //   this.mBarriarSet.addToSet(obj);
-    // }
+     else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Goal ){
+      obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }  else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Portal ){
+      obj = new Portal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag,sceneInfo.Square[i].End);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LREnimy ){
+      obj = new En(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Width,sceneInfo.Square[i].Height,sceneInfo.Square[i].Color,sceneInfo.Square[i].wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
     else {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);

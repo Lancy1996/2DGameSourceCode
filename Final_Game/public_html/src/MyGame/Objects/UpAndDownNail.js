@@ -9,9 +9,9 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownNail(atX, atY,inColor,high,type,dir/*,speed*/) {
-    this.pHp = "assets/Hp.png";
-    this.mNail = new SpriteRenderable(this.pHp);
+function UpAndDownNail(atX, atY,inColor,high,type,dir) {
+  this.mUDNail = "assets/UDNail.png";
+  this.mNail = new SpriteRenderable(this.mUDNail);
 
     this.mNail.setColor(inColor);
     this.mNail.getXform().setPosition(atX, atY);
@@ -27,7 +27,7 @@ function UpAndDownNail(atX, atY,inColor,high,type,dir/*,speed*/) {
 
     this.dir = dir;
     this.mFlag = type;
-    this.mSpeed = speed;
+
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mNail);
 
@@ -44,12 +44,13 @@ UpAndDownNail.prototype.getFlag = function(){
 
 UpAndDownNail.prototype.update = function (){
   var xf = this.mNail.getXform();
-  var speed = 0.1;
+  var speed = 0.2;
   if (this.dir){
-    xf.incYPosBy(speed);
+    speed = 0.2;
   } else {
-    xf.incYPosBy(-speed);
+    speed = -0.2;
   }
+  xf.incYPosBy(speed);
   if (xf.getYPos() >= this.uperBound ){
     this.dir = false;
   }

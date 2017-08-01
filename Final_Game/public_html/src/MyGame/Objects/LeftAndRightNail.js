@@ -9,9 +9,9 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function LeftAndRightNail(atX, atY,inColor,wide,type,dir/*,speed*/) {
-    this.pHp = "assets/Hp.png";
-    this.mNail = new SpriteRenderable(this.pHp);
+function LeftAndRightNail(atX, atY,inColor,wide,type,dir) {
+  this.mLRNail = "assets/LRNail.png";
+  this.mNail = new SpriteRenderable(this.mLRNail);
 
     this.mNail.setColor(inColor);
     this.mNail.getXform().setPosition(atX, atY);
@@ -26,7 +26,6 @@ function LeftAndRightNail(atX, atY,inColor,wide,type,dir/*,speed*/) {
   }
     this.dir = dir;
     this.mFlag = type;
-    // this.mSpeed = speed;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mNail);
 
@@ -38,17 +37,18 @@ LeftAndRightNail.prototype.getFlag = function(){
 }
 
 // LeftAndRightNail.prototype.getSpeed = function(){
-//   return this.mSpeed;
+//   return this.mSpd;
 // };
 
 LeftAndRightNail.prototype.update = function (){
   var xf = this.mNail.getXform();
-  var speed = 0.1;
+  var speed;
   if (this.dir){
-    xf.incXPosBy(speed);
+    speed = 0.2;
   } else {
-    xf.incXPosBy(-speed);
+    speed = -0.2;
   }
+  xf.incXPosBy(speed);
   if (xf.getXPos() >= this.rightBound ){
     this.dir = false;
   }

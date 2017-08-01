@@ -10,8 +10,8 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Nail(atX, atY,inColor,type) {
-    this.pHp = "assets/Hp.png";
-    this.mPlatform = new SpriteRenderable(this.pHp);
+    this.mUDNail = "assets/UDNail.png";
+    this.mPlatform = new SpriteRenderable(this.mUDNail);
 
     this.mPlatform.setColor(inColor);
     this.mPlatform.getXform().setPosition(atX, atY);

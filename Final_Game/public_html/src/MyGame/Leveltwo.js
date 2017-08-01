@@ -12,7 +12,7 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Leveltwo() {
-    this.kBackGround = "assets/Leveltwo.json";
+    this.kBackGround = "assets/Map/Leveltwo.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
     this.mHero = null;
@@ -108,7 +108,19 @@ Leveltwo.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Goal ){
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Spring ){
+      obj = new Spring(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Goal ){
       obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -155,6 +167,7 @@ Leveltwo.prototype.draw = function () {
     this.mCamera.setupViewProjection();
     this.mHero.draw(this.mCamera);
     this.mBarriarSet.draw(this.mCamera);
+
 
     this.mCamerafonts.setupViewProjection();
     this.mHpf.draw(this.mCamerafonts);

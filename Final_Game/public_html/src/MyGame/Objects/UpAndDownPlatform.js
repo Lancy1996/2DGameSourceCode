@@ -9,7 +9,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function UpAndDownPlatform(atX, atY,inColor,high,type,dir/*,speed*/) {
+function UpAndDownPlatform(atX, atY,inColor,high,type,dir,speed) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);
@@ -26,7 +26,7 @@ function UpAndDownPlatform(atX, atY,inColor,high,type,dir/*,speed*/) {
 
     this.dir = dir;
     this.mFlag = type;
-    // this.mSpeed = speed;
+    this.mSpd = speed;
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);
 
@@ -37,18 +37,23 @@ UpAndDownPlatform.prototype.getFlag = function(){
   return this.mFlag;
 };
 
-// UpAndDownPlatform.prototype.getSpeed = function(){
-//   return this.mSpeed;
-// };
+UpAndDownPlatform.prototype.getSpeed = function(){
+  if(this.dir){
+    return this.mSpd;
+  } else {
+    return -this.mSpd;
+  }
+};
 
 UpAndDownPlatform.prototype.update = function (){
   var xf = this.mPlatform.getXform();
-  var speed = 0.1;
+  var speed;
   if (this.dir){
-    xf.incYPosBy(speed);
+    speed = this.mSpd;
   } else {
-    xf.incYPosBy(-speed);
+    speed = -this.mSpd;
   }
+  xf.incYPosBy(speed);
   if (xf.getYPos() >= this.uperBound ){
     this.dir = false;
   }

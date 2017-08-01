@@ -12,7 +12,10 @@
         "LRNail":6,
         "Hp":7,
         "Spring":8,
-        "Goal":9
+        "Goal":9,
+            "Portal":10,
+         "Enimy" :11,
+            "LREnimy":12
     },
 
     "Square": [
@@ -51,9 +54,9 @@
             "Color": [0, 0, 0, 1],
             "Tag": 1
         },
-    
-     
-     
+
+
+
 
         {
             "Pos": [50,33 ],
@@ -88,7 +91,7 @@
             "Color": [0, 0, 0, 1],
             "Tag": 1
         },
-        
+
          {
             "Pos": [110,83],
             "Width": 20,
@@ -119,7 +122,7 @@
             "Height": 3,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-           
+
             "Tag":1
         },
         {
@@ -128,7 +131,7 @@
             "Height": 20,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            
+
             "Tag":1
         },
           {
@@ -137,7 +140,7 @@
             "Height": 2,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            
+
             "Tag":1
         },
             {
@@ -146,7 +149,7 @@
             "Height": 2,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            
+
             "Tag":1
         },
                {
@@ -155,183 +158,183 @@
             "Height": 2,
             "Rotation": 0,
             "Color": [0, 0, 0, 1],
-            
+
             "Tag":1
         },
-        
-        
+
+
         {
             "Pos": [-12.5,2.5],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,75],
-            "Tag": "access1"
+            "Tag": 10
         },
            {
             "Pos": [22,27],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,0],
-            "Tag": "access1"
+            "Tag": 10
         },
         {
             "Pos": [50,2.5],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,0],
-            "Tag": "access2"
+            "Tag": 10
         },
            {
             "Pos": [50,27],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[100,0],
-            "Tag": "access2"
+            "Tag": 10
         },
          {
             "Pos": [112.5,2.5],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[100,40],
-            "Tag": "access3"
+            "Tag": 10
         },
            {
             "Pos": [78,27],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,0],
-            "Tag": "access3"
+            "Tag": 10
         },
           {
             "Pos": [-12.5,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,75],
-            "Tag": "access4"
+            "Tag": 10
         },
           {
             "Pos": [22,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,40],
-            "Tag": "access4"
+            "Tag": 10
         },
          {
             "Pos": [34,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,40],
-            "Tag": "access5"
+            "Tag":10
         },
           {
             "Pos": [66,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,0],
-            "Tag": "access5"
+            "Tag": 10
         },
         {
             "Pos": [50,39],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,75],
-            "Tag": "access5"
+            "Tag": 10
         },
           {
             "Pos": [50,60],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[100,40],
-            "Tag": "access5"
+            "Tag": 10
         },
         {
             "Pos": [78,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,40],
-            "Tag": "access6"
+            "Tag": 10
         },
           {
             "Pos": [112.5,50],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[100,75],
-            "Tag": "access6"
+            "Tag": 10
         },
             {
             "Pos": [-12.5,72],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,0],
-            "Tag": "access7"
+            "Tag": 10
         },
           {
             "Pos": [22,97.5],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,75],
-            "Tag": "access7"
+            "Tag": 10
         },
            {
             "Pos": [50,72],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,40],
-            "Tag": "access8"
+            "Tag": 10
         },
           {
             "Pos": [50,97.5],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[40,40],
-            "Tag": "access8"
+            "Tag": 10
         },
           {
             "Pos": [78,72],
             "Width": 5,
             "Height": 5,
             "Rotation": 0,
-            "Color": [1, 0, 0, 1],
+            "Color": [1, 0, 0, 0],
             "End":[0,0],
-            "Tag": "access9"
+            "Tag": 10
         },
-        
+
              {
             "Pos": [5,62],
             "Width": 24,
@@ -354,31 +357,10 @@
             "Speed":1,
             "Tag": 5
         },
-        {
-            "Pos": [66,15],
-            "Width": 3,
-            "Height": 3,
-            "Rotation": 0,
-            "Color": [0, 1, 0, 1],
-            "Wide":15,
-            "Dir":false,
-            "Speed":1,
-            "Tag": 6
-        },
-           {
-            "Pos": [34,15],
-            "Width": 3,
-            "Height": 3,
-            "Rotation": 0,
-            "Color": [0, 1, 0, 1],
-            "Wide":15,
-            "Dir":true,
-            "Speed":1,
-            "Tag": 6
-        },
-        
-      
-            
+
+
+
+
           {
             "Pos": [101, 28],
             "Width": 3,
@@ -387,10 +369,10 @@
             "Color": [0, 1, 0.8, 1],
             "Tag": 7
         },
-     
-        
-  
-     
+
+
+
+
           {
             "Pos": [114, 88],
             "Width": 3,
@@ -407,4 +389,3 @@
 
     ]
 }
-

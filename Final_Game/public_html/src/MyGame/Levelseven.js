@@ -12,9 +12,10 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Levelseven() {
-    this.kBackGround = "assets/Levelseven.json";
+    this.kBackGround = "assets/Map/Levelseven.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
+    this.kLast = "assets/bgm/Last.mp3";
     this.mHero = null;
     this.mCamera = null;
     this.mCameraAll = null;
@@ -23,6 +24,7 @@ function Levelseven() {
     this.mHpf = null;
     this.mHp = null;
     this.jstate = 0;
+    this.hint = null;
 }
 gEngine.Core.inheritPrototype(Levelseven, Scene);
 
@@ -35,12 +37,13 @@ Levelseven.prototype.unloadScene = function () {
   if(gState === -1){
     var nextLevel = new GameOver();
   } else {
-  var nextLevel = new Leveltwo();
+  var nextLevel = new Continue();
 }
   gEngine.Core.startScene(nextLevel);
 };
 
 Levelseven.prototype.initialize = function () {
+  gEngine.AudioClips.playBackgroundAudio(this.kLast);
   var jsonString = gEngine.ResourceMap.retrieveAsset(this.kBackGround);
   // two way to change a json to js object
   var sceneInfo = JSON.parse(jsonString);
@@ -50,12 +53,6 @@ Levelseven.prototype.initialize = function () {
     [100,0,1180,720]
   );
 
-  this.mCameraAll = new Camera(
-    [50,50],
-    100,
-    [1080,520,200,200]
-  );
-
   this.mCamerafonts = new Camera(
     [0,0],
     10,
@@ -63,7 +60,11 @@ Levelseven.prototype.initialize = function () {
   );
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
-  this.mHero = new Hero(4,5,3,3);
+  var hString = "MAKE CHOICE!";
+  this.hint = new FontRenderable(hString);
+  this.hint.setFont(this.kFontCon32);
+  this._initText(this.hint, -10,61, [0, 0, 0, 1], 4);
+  this.mHero = new Hero(0,60,3,3);
 
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
@@ -97,7 +98,7 @@ Levelseven.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Goal ){
+    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Goal ){
       obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -108,28 +109,18 @@ Levelseven.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     }
-    // else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Spring ){
-    //   obj = new Spring(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
-    //   obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-    //   obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-    //   var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-    //   rigidShape.setMass(0);  // ensures no movements!
-    //   rigidShape.setDrawBounds(true);
-    //   rigidShape.setColor([1, 1, 1, 0]);
-    //   obj.setPhysicsComponent(rigidShape);
-    //   this.mBarriarSet.addToSet(obj);
-    // }
-    // else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Portal ){
-    //   obj = new Portal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag,sceneInfo.Square[i].End);
-    //   obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
-    //   obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
-    //   var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
-    //   rigidShape.setMass(0);  // ensures no movements!
-    //   rigidShape.setDrawBounds(true);
-    //   rigidShape.setColor([1, 1, 1, 0]);
-    //   obj.setPhysicsComponent(rigidShape);
-    //   this.mBarriarSet.addToSet(obj);
-    // }
+    else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Boss ){
+      obj = new Death(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
+      obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
+      obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
+      var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
+      rigidShape.setMass(0);  // ensures no movements!
+      rigidShape.setDrawBounds(true);
+      rigidShape.setColor([1, 1, 1, 0]);
+      obj.setPhysicsComponent(rigidShape);
+      this.mBarriarSet.addToSet(obj);
+    }
+
     else {
       obj = new Platform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
@@ -165,17 +156,14 @@ Levelseven.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9 , 0.9 , 0.9, 1]);
 
     this.mCamera.setupViewProjection();
+    this.hint.draw(this.mCamera);
     this.mHero.draw(this.mCamera);
     this.mBarriarSet.draw(this.mCamera);
+
 
     this.mCamerafonts.setupViewProjection();
     this.mHpf.draw(this.mCamerafonts);
     this.mHp.draw(this.mCamerafonts);
-
-    this.mCameraAll.setupViewProjection();
-    this.mHero.draw(this.mCameraAll);
-    this.mBarriarSet.draw(this.mCameraAll);
-
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw

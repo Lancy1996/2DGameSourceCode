@@ -25,4 +25,4 @@ gEngine.Core.inheritPrototype(Platform, GameObject);
 
 Platform.prototype.getFlag = function(){
   return this.mFlag;
-}
+};

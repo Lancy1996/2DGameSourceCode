@@ -9,7 +9,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function LeftAndRightPlatform(atX, atY,inColor,wide,type,dir/*,speed*/) {
+function LeftAndRightPlatform(atX, atY,inColor,wide,type,dir,speed) {
     this.mPlatform = new Renderable();
 
     this.mPlatform.setColor(inColor);
@@ -24,8 +24,9 @@ function LeftAndRightPlatform(atX, atY,inColor,wide,type,dir/*,speed*/) {
     this.leftBound = atX-wide;
   }
     this.dir = dir;
+    this.mSpd = speed;
     this.mFlag = type;
-    // this.mSpeed = speed;
+
                                 // show each element for mAnimSpeed updates
     GameObject.call(this, this.mPlatform);
 
@@ -34,20 +35,26 @@ gEngine.Core.inheritPrototype(LeftAndRightPlatform, GameObject);
 
 LeftAndRightPlatform.prototype.getFlag = function(){
   return this.mFlag;
-}
+};
 
-// LeftAndRightPlatform.prototype.getSpeed = function(){
-//   return this.mSpeed;
-// };
+LeftAndRightPlatform.prototype.getSpeed = function(){
+  if(this.dir){
+    return this.mSpd;
+  } else {
+    return -this.mSpd;
+  }
+};
 
 LeftAndRightPlatform.prototype.update = function (){
   var xf = this.mPlatform.getXform();
-  var speed = 0.1;
+  var speed;
+  // var speed = 0.1;
   if (this.dir){
-    xf.incXPosBy(speed);
+    speed = this.mSpd;
   } else {
-    xf.incXPosBy(-speed);
+    speed = -this.mSpd;
   }
+  xf.incXPosBy(speed);
   if (xf.getXPos() >= this.rightBound ){
     this.dir = false;
   }

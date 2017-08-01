@@ -12,7 +12,7 @@
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
 function Levelthree() {
-    this.kBackGround = "assets/Levelthree.json";
+    this.kBackGround = "assets/Map/Levelthree.json";
     this.kFontCon32 = "assets/fonts/Consolas-32";
     this.pHp = "assets/Hp.png";
     this.mHero = null;
@@ -33,9 +33,10 @@ Levelthree.prototype.loadScene = function () {
 Levelthree.prototype.unloadScene = function () {
   gEngine.TextFileLoader.unloadTextFile(this.kBackGround);
   if(gState === -1){
+    gEngine.AudioClips.stopBackgroundAudio();
     var nextLevel = new GameOver();
   } else {
-  var nextLevel = new Continue();
+  var nextLevel = new Levelfour();
 }
   gEngine.Core.startScene(nextLevel);
 };
@@ -63,12 +64,12 @@ Levelthree.prototype.initialize = function () {
   );
   this.mCamerafonts.setBackgroundColor([1,1,1,0]);
 
-  this.mHero = new Hero(50,50,5,5);
+  this.mHero = new Hero(0,40,5,5);
 
   var i,obj;
   for (i = 0;i < sceneInfo.Square.length;i++){
     if(sceneInfo.Square[i].Tag === sceneInfo.Type.UDPlatform){
-      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new UpAndDownPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -78,7 +79,7 @@ Levelthree.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LRPlatform ){
-      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new LeftAndRightPlatform(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -98,7 +99,7 @@ Levelthree.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     }else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.UDNail ){
-      obj = new UpAndDownNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new UpAndDownNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].High,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -108,7 +109,7 @@ Levelthree.prototype.initialize = function () {
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
     }else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.LRNail ){
-      obj = new LeftAndRightNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir);
+      obj = new LeftAndRightNail(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Wide,sceneInfo.Square[i].Tag,sceneInfo.Square[i].Dir,sceneInfo.Square[i].Speed);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
       var rigidShape = new RigidRectangle(obj.getXform(), sceneInfo.Square[i].Width, sceneInfo.Square[i].Height);
@@ -127,7 +128,7 @@ Levelthree.prototype.initialize = function () {
       rigidShape.setColor([1, 1, 1, 0]);
       obj.setPhysicsComponent(rigidShape);
       this.mBarriarSet.addToSet(obj);
-    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Goal ){
+    } else if ( sceneInfo.Square[i].Tag === sceneInfo.Type.Goal ){
       obj = new Goal(sceneInfo.Square[i].Pos[0],sceneInfo.Square[i].Pos[1],sceneInfo.Square[i].Color,sceneInfo.Square[i].Tag);
       obj.getXform().setSize(sceneInfo.Square[i].Width,sceneInfo.Square[i].Height);
       obj.getXform().setRotationInDegree(sceneInfo.Square[i].Rotation);
@@ -173,6 +174,7 @@ Levelthree.prototype.draw = function () {
     this.mCamera.setupViewProjection();
     this.mHero.draw(this.mCamera);
     this.mBarriarSet.draw(this.mCamera);
+
 
     this.mCamerafonts.setupViewProjection();
     this.mHpf.draw(this.mCamerafonts);
